@@ -1,13 +1,20 @@
-import { IComposeProviders } from './composeProviders.interface';
+import React from 'react';
 
-export const ComposeProviders = <P extends {}>(props: IComposeProviders<P>) => {
-  const { providers, children } = props;
+interface Props {
+  providers: Array<
+    React.JSXElementConstructor<React.PropsWithChildren<unknown>>
+  >;
+  children: React.ReactNode;
+}
+
+export const ComposeProviders = React.memo((props: Props) => {
+  const { providers = [], children } = props;
 
   return (
     <>
-      {providers.reduceRight((acc, [Provider, providerProps]) => {
-        return <Provider {...providerProps}>{acc}</Provider>;
+      {providers.reduceRight((acc, Component) => {
+        return <Component>{acc}</Component>;
       }, children)}
     </>
   );
-};
+});
