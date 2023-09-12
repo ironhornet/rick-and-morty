@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 import { ButtonMui } from '../ButtonMui/ButtonMui';
-import { FormWithFormik } from '../../FormWithFormik/FormWithFormik';
+import { FormWithFormik } from '../FormWithFormik/FormWithFormik';
 import {
   CATEGORY_KEY_ENUM,
   ICategory,
