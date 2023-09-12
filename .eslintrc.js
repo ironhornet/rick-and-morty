@@ -14,7 +14,6 @@ module.exports = {
     'plugin:react/jsx-runtime',
     'airbnb',
     'airbnb/hooks',
-    'prettier',
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
@@ -24,7 +23,7 @@ module.exports = {
     ecmaVersion: 'latest',
     sourceType: 'module',
   },
-  plugins: ['react', '@typescript-eslint', 'jest', 'prettier'],
+  plugins: ['react', '@typescript-eslint', 'jest'],
   settings: {
     'import/extensions': ['.js', '.jsx', '.ts', '.tsx'],
     'import/parsers': {
@@ -109,7 +108,7 @@ module.exports = {
     'rest-spread-spacing': WARNING, // this rule enforces spacing between rest and spread operators and their expressions
     'react/prop-types': OFF,
     'react/function-component-definition': [
-      ERROR,
+      OFF,
       {
         namedComponents: 'arrow-function',
         unnamedComponents: 'arrow-function',
@@ -149,6 +148,7 @@ module.exports = {
     'import/newline-after-import': ERROR,
     '@typescript-eslint/ban-types': OFF,
     '@typescript-eslint/no-unused-vars': WARNING,
+    '@typescript-eslint/no-inferrable-types': OFF,
     '@typescript-eslint/no-unused-expressions': [
       ERROR,
       {
