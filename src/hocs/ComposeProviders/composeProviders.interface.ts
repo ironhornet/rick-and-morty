@@ -1,13 +1,8 @@
-import { 
-  ComponentType, 
-  ReactNode,
-} from 'react';
+import { JSXElementConstructor, PropsWithChildren, ReactNode } from 'react';
 
-export interface IWithChildren {
-  children?: ReactNode;
-}
-
-export interface IComposeProviders<P> {
+export interface IComposeProviders {
+  providers: Array<
+    JSXElementConstructor<PropsWithChildren<unknown>>
+  >;
   children: ReactNode;
-  providers: [ComponentType<P>, P][];
 }

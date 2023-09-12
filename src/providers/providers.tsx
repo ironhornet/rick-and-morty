@@ -4,5 +4,5 @@ import { store } from '../store/store';
 
 export const providers = [
   BrowserRouter,
-  (props: any) => <Provider store={store}>{props.children}</Provider>,
+  (props: any) => <Provider store={store}>{props.children}</Provider>, // eslint-disable-line
 ];

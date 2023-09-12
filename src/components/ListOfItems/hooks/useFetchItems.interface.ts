@@ -3,7 +3,6 @@ import {
   IInfoDto,
 } from '../../../types/character.interface';
 
-
 export interface IUseFetchItems {
   data: {
     info: IInfoDto | null;

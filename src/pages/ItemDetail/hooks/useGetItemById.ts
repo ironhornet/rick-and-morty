@@ -9,6 +9,7 @@ export const useGetItemById = (id: number, shouldFetch: boolean) => {
   useEffect(() => {
     if (!shouldFetch) {
       setLoading(false);
+      
       return;
     }
 

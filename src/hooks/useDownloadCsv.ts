@@ -1,11 +1,11 @@
 import { ICharacterDto } from '../types/character.interface';
 
-type FlattenedObject = {
-  [key: string]: any;
-};
+type FlattenedObject = Record<string, string | number>;
 
 export const useDownloadCsv = () => {
-  const isObjectButNotArray = (value: any): boolean => {
+  const isObjectButNotArray = (
+    value: unknown
+  ): value is Record<string, unknown> => {
     return typeof value === 'object' && !Array.isArray(value) && value !== null;
   };
 
@@ -14,35 +14,40 @@ export const useDownloadCsv = () => {
   };
 
   const handleValue = (
-    value: any,
+    value: unknown,
     propName: string,
     acc: FlattenedObject
   ): void => {
-    if (Array.isArray(value)) {
+    if (typeof value === 'string' || typeof value === 'number') {
+      acc[propName] = value;
+    } else if (Array.isArray(value)) {
       acc[propName] = value.join(', ');
     } else {
-      acc[propName] = value || 'N/A';
+      acc[propName] = 'N/A';
     }
   };
 
-  const flattenObject = (obj: ICharacterDto, parent: string = ''): FlattenedObject => {
-    return Object.entries(obj).reduce(
-      (acc: FlattenedObject, [key, value]: [string, any]) => {
-        const propName = getPropName(parent, key);
+  const flattenObject = (
+    obj: Record<string, unknown>,
+    parent: string = ''
+  ): FlattenedObject => {
+    return Object.entries(obj).reduce((acc: FlattenedObject, [key, value]) => {
+      const propName = getPropName(parent, key);
 
-        if (isObjectButNotArray(value)) {
-          Object.assign(acc, flattenObject(value as ICharacterDto, propName));
-        } else {
-          handleValue(value, propName, acc);
-        }
+      if (isObjectButNotArray(value)) {
+        Object.assign(
+          acc,
+          flattenObject(value as Record<string, unknown>, propName)
+        );
+      } else {
+        handleValue(value, propName, acc);
+      }
 
-        return acc;
-      },
-      {}
-    );
+      return acc;
+    }, {});
   };
 
-  const validateInputData = (dataArray: ICharacterDto[] | any[]): void => {
+  const validateInputData = (dataArray: ICharacterDto[]): void => {
     if (
       !Array.isArray(dataArray) ||
       dataArray.some((row) => typeof row !== 'object')
@@ -64,7 +69,7 @@ export const useDownloadCsv = () => {
   const convertToCsv = (dataArray: ICharacterDto[]): string => {
     validateInputData(dataArray);
 
-    const flattenedData = dataArray.map((data) => flattenObject(data));
+    const flattenedData = dataArray.map((data) => flattenObject(data as unknown as Record<string, unknown>));
     const headers = Object.keys(flattenedData[0]);
     const csvData = flattenedData.map((row) => createCsvRow(row, headers));
 
@@ -86,7 +91,10 @@ export const useDownloadCsv = () => {
     document.body.removeChild(a);
   };
 
-  const downloadCsv = (data: ICharacterDto[], filename: string = 'data.csv'): void => {
+  const downloadCsv = (
+    data: ICharacterDto[],
+    filename: string = 'data.csv'
+  ): void => {
     const csvContent = convertToCsv(data);
     saveFileTo(filename, csvContent);
   };

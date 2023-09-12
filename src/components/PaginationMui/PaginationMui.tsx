@@ -1,13 +1,15 @@
-import { Pagination, Stack } from '@mui/material';
+import { ChangeEvent } from 'react';
+import { Stack } from '@mui/material';
 import { StyledPagination } from './pagination.styles';
 import { IPaginationMuiProps } from './paginatiouMui.interface';
 
 export const PaginationMui = (props: IPaginationMuiProps) => {
   const { count, onSetPageNumberHandler, currentPage } = props;
 
-  const onChangeHandler = (e: any, page: number) => {
+  const onChangeHandler = (e: ChangeEvent<unknown>, page: number) => {
     onSetPageNumberHandler(page);
   };
+
   return (
     <Stack
       spacing={2}
