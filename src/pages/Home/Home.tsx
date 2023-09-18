@@ -53,6 +53,9 @@ export const Home = () => {
     locationError,
     fetchingStatus,
     pageNumWithFilters,
+    characterLoading,
+    episodeLoading,
+    locationLoading,
   } = useAppSelector((state) => state.characterList);
 
   const nextAndPrevPageToggle = (pageNum: number) => {
@@ -160,6 +163,14 @@ export const Home = () => {
   const onFiltersReset = () => {
     setCharacterFilterParams(null);
   };
+  const loadingState = {
+    characterLoading,
+    episodeLoading,
+    locationLoading,
+    loading,
+  };
+
+  const isLoading = Object.values(loadingState).some((value) => value === true);
 
   return (
     <div>
@@ -169,8 +180,8 @@ export const Home = () => {
         onReset={onFiltersReset}
       />
 
-      {loading && <Loader />}
-      {!loading && (
+      {isLoading && <Loader />}
+      {!isLoading && (
         <ListOfItems
           data={data}
           error={[characterError, episodeError, locationError]}

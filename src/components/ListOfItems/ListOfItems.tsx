@@ -14,7 +14,7 @@ export const ListOfItems: FC<IListOfItemsProps> = ({
 }) => {
   const hasError = error.some((value) => typeof value === 'string');
 
-  if (hasError || !data.results) {
+  if (hasError) {
     return (
       <ListWrapper>
         <h2 style={{margin: '0 auto'}}>Sorry there is no characters matched with your filters</h2>;
