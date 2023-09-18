@@ -37,8 +37,6 @@ export const Home = () => {
     useState<ICharacter | null>(null);
   const [filledFilters, setFilledFilters] = useState<ICharacter | {}>({});
 
-  // TODO Зробити щоб фетчились всі айтеми без фільтрів
-
   const dispatch = useAppDispatch();
 
   const {
