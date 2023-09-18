@@ -7,7 +7,6 @@ export const HistoryList = (props: IHistoryListProps) => {
   const capitalizeFirstLetter = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
 
   const prepareSection = (sectionKey: string, sectionValue: Record<string, string>) => {
-    console.log(sectionValue);
     const sectionName = capitalizeFirstLetter(sectionKey);
     const entries = Object.entries(sectionValue).map(([key, value]) => ({
       keyName: capitalizeFirstLetter(key),

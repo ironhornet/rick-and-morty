@@ -15,7 +15,7 @@ export interface ICategory {
   options: IOption[];
 }
 
-interface ICharacter {
+export interface ICharacter {
   name: string;
   status: string;
   species: string;
@@ -23,14 +23,13 @@ interface ICharacter {
   gender: string;
 }
 
-interface ILocation {
+export interface ILocation {
   name: string;
   type: string;
   dimensions: string;
 }
 
-interface IEpisodes {
-  name: string;
+export interface IEpisodes {
   episodes: string;
 }
 

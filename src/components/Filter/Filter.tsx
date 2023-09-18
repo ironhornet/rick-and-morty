@@ -1,16 +1,20 @@
-import { useState } from 'react';
+import { FC, useState } from 'react';
 
 import { ButtonMui } from '../ButtonMui/ButtonMui';
-import { FormWithFormik } from '../FormWithFormik/FormWithFormik';
-import {
-  CATEGORY_KEY_ENUM,
-  ICategory,
-  IInitialValues,
-} from './filter.interface';
+
 import { SelectMui } from '../SelectMui/SelectMui';
 import { DropDownWithInputs } from '../DropDownWithInputs/DropDownWithInputs';
 import { FilterWrapper, FormElementsWrapper } from './filter.styles';
 import { saveToLocalStorage } from '../../shared/helpers/saveToLocalStorage';
+import { 
+  CATEGORY_KEY_ENUM, 
+  ICategory, 
+  ICharacter, 
+  IEpisodes, 
+  IInitialValues, 
+  ILocation, 
+} from './filter.interface';
+import { FormWithFormik } from '../FormWithFormik/FormWithFormik';
 
 const categories: ICategory[] = [
   {
@@ -37,77 +41,65 @@ const categories: ICategory[] = [
     name: 'Episodes',
     key: CATEGORY_KEY_ENUM.EPISODES,
     options: [
-      { label: 'Add Name(Episodes)', value: 'name' },
       { label: 'Add Episodes', value: 'episodes' },
     ],
   },
 ];
 
-const initialValues: IInitialValues = {
-  selectedOptions: [],
-  character: {
-    name: '',
-    status: '',
-    species: '',
-    type: '',
-    gender: '',
-  },
-  location: {
-    name: '',
-    type: '',
-    dimensions: '',
-  },
-  episodes: {
-    name: '',
-    episodes: '',
-  },
-};
+interface IFilterProps {
+  initialValues: IInitialValues;
+  onSubmitHandler: (
+    location: ILocation,
+    episodes: IEpisodes,
+    character: ICharacter
+  ) => void;
+  onReset: () => void;
+}
 
-export const Filter = () => {
+export const Filter: FC<IFilterProps> = ({
+  initialValues,
+  onSubmitHandler,
+  onReset,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const isOpenhandler = () => {
+  const isOpenHandler = () => {
     setIsOpen(!isOpen);
+
+    if (isOpen) {
+      onReset();
+    }
   };
 
-  const onSubmitHandler = (values: IInitialValues) => {
+  const onSubmit = (values: IInitialValues) => {
     const { location, episodes, character } = values;
 
+    onSubmitHandler(location, episodes, character);
     saveToLocalStorage('filterHistory', { location, episodes, character });
   };
 
-  const areAllValuesEmpty = (values: IInitialValues) => {
-    const keys: (keyof IInitialValues)[] = ['character', 'location', 'episodes'];
-  
-    return keys.every((category) => {
-      return Object.values(values[category]).every((value) => value === '');
-    });
-  };
-  
   return (
     <FilterWrapper>
       <ButtonMui
         text={isOpen ? 'REMOVE FILTER' : 'FILTER'}
-        onCLickHandler={isOpenhandler}
+        onCLickHandler={isOpenHandler}
       />
       {isOpen && (
         <FormWithFormik<IInitialValues>
           initialValues={initialValues}
-          onSubmit={onSubmitHandler}
+          onSubmit={onSubmit}
         >
-          {(formik) => {
-            return (
-              <FormElementsWrapper>
-                <SelectMui {...formik} categories={categories} />
-                <DropDownWithInputs {...formik} categories={categories} />
-                <ButtonMui
-                  disabled={areAllValuesEmpty(formik.values)}
-                  text='FIND'
-                  onCLickHandler={formik.submitForm}
-                />
-              </FormElementsWrapper>
-            );
-          }}
+          {(formik) => (
+            <FormElementsWrapper>
+              <SelectMui {...formik} categories={categories} />
+              <DropDownWithInputs {...formik} categories={categories} />
+              <ButtonMui
+                disabled={!formik.dirty}
+                text='FIND'
+                onCLickHandler={formik.submitForm}
+              />
+            </FormElementsWrapper>
+          )}
         </FormWithFormik>
       )}
     </FilterWrapper>

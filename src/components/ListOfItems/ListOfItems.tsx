@@ -1,30 +1,35 @@
+import { FC } from 'react';
 import { Item } from '../Item/Item';
 import { PaginationMui } from '../PaginationMui/PaginationMui';
 import { ListWrapper } from './listOfItems.style';
-import { Loader } from '../Loader/Loader';
-import { useFetchItems } from './hooks/useFetchItems';
 import { FabMenu } from '../FabMenu/FabMenu';
+import { IListOfItemsProps } from './listoOfItems.interface';
 
-export const ListOfItems = () => {
-  const { 
-    data, 
-    loading, 
-    pageNumber, 
-    updatePageNumber,
-  } = useFetchItems();
+export const ListOfItems: FC<IListOfItemsProps> = ({
+  data,
+  pageNumber,
+  updatePageNumber,
+  error,
+  amountPages,
+}) => {
+  const hasError = error.some((value) => typeof value === 'string');
 
-  if (!data.results) return null;
-
-  if (loading) return <Loader />;
+  if (hasError || !data.results) {
+    return (
+      <ListWrapper>
+        <h2 style={{margin: '0 auto'}}>Sorry there is no characters matched with your filters</h2>;
+      </ListWrapper>
+    );
+  }
 
   return (
     <ListWrapper>
-      {data.results.map((item) => (
+      {data.results?.map((item) => (
         <Item key={item.id} {...item} />
       ))}
-      <PaginationMui 
+      <PaginationMui
         currentPage={pageNumber}
-        count={data.info?.pages || 1}
+        count={amountPages}
         onSetPageNumberHandler={updatePageNumber}
       />
       <FabMenu right={10} bottom={10} />

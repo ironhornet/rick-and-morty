@@ -15,6 +15,7 @@ export const PaginationMui = (props: IPaginationMuiProps) => {
       spacing={2}
       sx={{
         margin: '0 auto',
+        width: '100%',
       }}
     >
       <StyledPagination

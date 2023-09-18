@@ -3,6 +3,8 @@ import styled from 'styled-components';
 
 export const StyledPagination = styled(Pagination)`
   color: black;
+  display: flex;
+  justify-content: center;
 
   .MuiPaginationItem-root {
     color: #f5f5f5;
